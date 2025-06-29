@@ -1,4 +1,4 @@
-package com.nickdferrara.serverspringbootretail.orders
+package com.nickdferrara.serverspringbootretail.orders.controllers
 
 import com.nickdferrara.serverspringbootretail.orders.entities.Order
 import com.nickdferrara.serverspringbootretail.orders.entities.OrderItem
