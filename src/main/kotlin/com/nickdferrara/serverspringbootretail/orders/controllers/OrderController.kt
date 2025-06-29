@@ -22,15 +22,6 @@ class OrderController(
         return ResponseEntity.ok(order)
     }
     
-    @PostMapping("/{orderId}/receive")
-    fun receiveOrder(@PathVariable orderId: UUID): ResponseEntity<Order> {
-        val order = orderService.receiveOrder(orderId)
-        return if (order != null) {
-            ResponseEntity.ok(order)
-        } else {
-            ResponseEntity.notFound().build()
-        }
-    }
     
     @GetMapping("/{orderId}")
     fun getOrder(@PathVariable orderId: UUID): ResponseEntity<Order> {
@@ -42,10 +33,6 @@ class OrderController(
         }
     }
     
-    @GetMapping
-    fun getAllOrders(): ResponseEntity<List<Order>> {
-        return ResponseEntity.ok(orderService.getAllOrders())
-    }
 }
 
 data class CreateOrderRequest(

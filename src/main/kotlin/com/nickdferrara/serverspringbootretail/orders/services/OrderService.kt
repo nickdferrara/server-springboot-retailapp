@@ -4,48 +4,39 @@ import com.nickdferrara.serverspringbootretail.orders.entities.Order
 import com.nickdferrara.serverspringbootretail.orders.entities.OrderItem
 import com.nickdferrara.serverspringbootretail.orders.enums.OrderStatus
 import com.nickdferrara.serverspringbootretail.orders.events.OrderReceivedEvent
+import com.nickdferrara.serverspringbootretail.orders.repositories.OrderRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class OrderService(
+    private val orderRepository: OrderRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) {
-    private val orders = ConcurrentHashMap<UUID, Order>()
     
     fun createOrder(customerId: String, items: List<OrderItem>): Order {
         val totalAmount = items.sumOf { it.price * it.quantity }
         val order = Order(
             customerId = customerId,
             items = items,
-            totalAmount = totalAmount
+            totalAmount = totalAmount,
+            status = OrderStatus.RECEIVED
         )
         
-        orders[order.id] = order
-        return order
-    }
-    
-    fun receiveOrder(orderId: UUID): Order? {
-        val order = orders[orderId] ?: return null
-        val receivedOrder = order.copy(status = OrderStatus.RECEIVED)
-        orders[orderId] = receivedOrder
-        
-        // Publish event to fulfillment module
+        val savedOrder = orderRepository.save(order)
+
         eventPublisher.publishEvent(
             OrderReceivedEvent(
-                orderId = receivedOrder.id,
-                customerId = receivedOrder.customerId,
-                totalAmount = receivedOrder.totalAmount,
-                items = receivedOrder.items
+                orderId = savedOrder.id,
+                customerId = savedOrder.customerId,
+                totalAmount = savedOrder.totalAmount,
+                items = savedOrder.items
             )
         )
         
-        return receivedOrder
+        return savedOrder
     }
     
-    fun getOrder(orderId: UUID): Order? = orders[orderId]
-    
-    fun getAllOrders(): List<Order> = orders.values.toList()
+    fun getOrder(orderId: UUID): Order? = orderRepository.findById(orderId).orElse(null)
 }

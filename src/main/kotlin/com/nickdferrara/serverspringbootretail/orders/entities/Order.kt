@@ -22,7 +22,7 @@ data class Order(
     
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    val status: OrderStatus = OrderStatus.PENDING,
+    val status: OrderStatus = OrderStatus.RECEIVED,
     
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now()
