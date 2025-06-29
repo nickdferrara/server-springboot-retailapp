@@ -5,8 +5,8 @@ import com.nickdferrara.serverspringbootretail.fulfillment.entities.PickItem
 import com.nickdferrara.serverspringbootretail.fulfillment.enums.FulfillmentStatus
 import com.nickdferrara.serverspringbootretail.fulfillment.repositories.PicklistRepository
 import com.nickdferrara.serverspringbootretail.orders.events.OrderReceivedEvent
-import org.springframework.modulith.ApplicationModuleListener
 import org.springframework.stereotype.Service
+import org.springframework.transaction.event.TransactionalEventListener
 import java.time.LocalDateTime
 import java.util.*
 
@@ -15,7 +15,7 @@ class FulfillmentService(
     private val picklistRepository: PicklistRepository
 ) {
     
-    @ApplicationModuleListener
+    @TransactionalEventListener
     fun handle(event: OrderReceivedEvent) {
         println("📦 Fulfillment module received order: ${event.orderId}")
         
@@ -35,8 +35,7 @@ class FulfillmentService(
             totalAmount = event.totalAmount
         )
         
-        val savedPicklist = picklistRepository.save(picklist)
-        println("✅ Created picklist ${savedPicklist.id} for order ${event.orderId}")
+        picklistRepository.save(picklist)
     }
     
     fun startPicking(picklistId: UUID): Picklist? {
