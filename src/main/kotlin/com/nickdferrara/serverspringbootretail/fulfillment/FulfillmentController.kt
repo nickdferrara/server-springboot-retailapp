@@ -9,27 +9,7 @@ import java.util.*
 class FulfillmentController(
     private val fulfillmentService: FulfillmentService
 ) {
-    
-    @GetMapping
-    fun getAllFulfillmentRequests(): ResponseEntity<List<FulfillmentRequest>> {
-        return ResponseEntity.ok(fulfillmentService.getAllFulfillmentRequests())
-    }
-    
-    @GetMapping("/{fulfillmentId}")
-    fun getFulfillmentRequest(@PathVariable fulfillmentId: UUID): ResponseEntity<FulfillmentRequest> {
-        val request = fulfillmentService.getFulfillmentRequest(fulfillmentId)
-        return if (request != null) {
-            ResponseEntity.ok(request)
-        } else {
-            ResponseEntity.notFound().build()
-        }
-    }
-    
-    @GetMapping("/order/{orderId}")
-    fun getFulfillmentsByOrderId(@PathVariable orderId: UUID): ResponseEntity<List<FulfillmentRequest>> {
-        return ResponseEntity.ok(fulfillmentService.getFulfillmentsByOrderId(orderId))
-    }
-    
+
     @PostMapping("/{fulfillmentId}/start-picking")
     fun startPicking(@PathVariable fulfillmentId: UUID): ResponseEntity<FulfillmentRequest> {
         val request = fulfillmentService.startPicking(fulfillmentId)

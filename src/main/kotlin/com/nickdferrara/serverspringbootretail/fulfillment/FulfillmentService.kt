@@ -1,6 +1,6 @@
 package com.nickdferrara.serverspringbootretail.fulfillment
 
-import com.nickdferrara.serverspringbootretail.orders.OrderReceivedEvent
+import com.nickdferrara.serverspringbootretail.orders.events.OrderReceivedEvent
 import org.springframework.modulith.ApplicationModuleListener
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -51,11 +51,4 @@ class FulfillmentService {
         fulfillmentRequests[fulfillmentId] = updatedRequest
         return updatedRequest
     }
-    
-    fun getFulfillmentRequest(fulfillmentId: UUID): FulfillmentRequest? = fulfillmentRequests[fulfillmentId]
-    
-    fun getAllFulfillmentRequests(): List<FulfillmentRequest> = fulfillmentRequests.values.toList()
-    
-    fun getFulfillmentsByOrderId(orderId: UUID): List<FulfillmentRequest> =
-        fulfillmentRequests.values.filter { it.orderId == orderId }
 }

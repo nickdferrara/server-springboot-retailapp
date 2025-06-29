@@ -21,18 +21,6 @@ class OrderController(
         )
         return ResponseEntity.ok(order)
     }
-    
-    
-    @GetMapping("/{orderId}")
-    fun getOrder(@PathVariable orderId: UUID): ResponseEntity<Order> {
-        val order = orderService.getOrder(orderId)
-        return if (order != null) {
-            ResponseEntity.ok(order)
-        } else {
-            ResponseEntity.notFound().build()
-        }
-    }
-    
 }
 
 data class CreateOrderRequest(
