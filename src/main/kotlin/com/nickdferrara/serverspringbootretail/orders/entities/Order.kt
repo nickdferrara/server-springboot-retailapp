@@ -43,6 +43,11 @@ class Order(
         domainEvents.clear()
     }
     
+    @PostPersist
+    private fun onOrderPersisted() {
+        registerOrderReceivedEvent()
+    }
+    
     fun registerOrderReceivedEvent() {
         domainEvents.add(
             OrderReceivedEvent(

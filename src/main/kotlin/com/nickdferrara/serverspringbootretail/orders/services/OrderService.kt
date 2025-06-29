@@ -21,9 +21,7 @@ class OrderService(
             status = OrderStatus.RECEIVED
         )
 
-        order.registerOrderReceivedEvent()
         val savedOrder = orderRepository.save(order)
-
         return savedOrder
     }
 }
