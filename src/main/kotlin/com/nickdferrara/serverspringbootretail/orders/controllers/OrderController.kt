@@ -4,6 +4,7 @@ import com.nickdferrara.serverspringbootretail.orders.dtos.CreateOrderRequest
 import com.nickdferrara.serverspringbootretail.orders.dtos.UpdateOrderRequest
 import com.nickdferrara.serverspringbootretail.orders.entities.Order
 import com.nickdferrara.serverspringbootretail.orders.entities.OrderItem
+import com.nickdferrara.serverspringbootretail.orders.exceptions.OrderUpdateNotAllowedException
 import com.nickdferrara.serverspringbootretail.orders.services.OrderService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -36,7 +37,7 @@ class OrderController(
             } else {
                 ResponseEntity.notFound().build()
             }
-        } catch (e: IllegalStateException) {
+        } catch (e: OrderUpdateNotAllowedException) {
             ResponseEntity.badRequest().build()
         }
     }
