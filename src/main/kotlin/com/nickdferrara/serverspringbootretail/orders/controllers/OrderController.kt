@@ -1,5 +1,6 @@
 package com.nickdferrara.serverspringbootretail.orders.controllers
 
+import com.nickdferrara.serverspringbootretail.orders.dtos.CreateOrderRequest
 import com.nickdferrara.serverspringbootretail.orders.entities.Order
 import com.nickdferrara.serverspringbootretail.orders.entities.OrderItem
 import com.nickdferrara.serverspringbootretail.orders.services.OrderService
@@ -22,8 +23,3 @@ class OrderController(
         return ResponseEntity.ok(order)
     }
 }
-
-data class CreateOrderRequest(
-    val customerId: String,
-    val items: List<OrderItem>
-)
