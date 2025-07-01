@@ -1,6 +1,6 @@
 package com.nickdferrara.serverspringbootretail.orders.services
 
-import com.nickdferrara.serverspringbootretail.fulfillment.FulfillmentService
+import com.nickdferrara.serverspringbootretail.fulfillment.FulfillmentApi
 import com.nickdferrara.serverspringbootretail.orders.dtos.UpdateOrderRequest
 import com.nickdferrara.serverspringbootretail.orders.entities.Order
 import com.nickdferrara.serverspringbootretail.orders.entities.OrderItem
@@ -12,7 +12,7 @@ import java.util.*
 @Service
 class OrderService(
     private val orderRepository: OrderRepository,
-    private val fulfillmentService: FulfillmentService
+    private val fulfillmentService: FulfillmentApi
 ) {
 
     fun createOrder(customerId: String, items: List<OrderItem>): Order {
