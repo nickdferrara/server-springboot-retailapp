@@ -1,6 +1,7 @@
 package com.nickdferrara.serverspringbootretail.orders.controllers
 
 import com.nickdferrara.serverspringbootretail.orders.dtos.CreateOrderRequest
+import com.nickdferrara.serverspringbootretail.orders.dtos.UpdateOrderRequest
 import com.nickdferrara.serverspringbootretail.orders.entities.Order
 import com.nickdferrara.serverspringbootretail.orders.entities.OrderItem
 import com.nickdferrara.serverspringbootretail.orders.services.OrderService
@@ -21,5 +22,22 @@ class OrderController(
             createOrderRequest.items
         )
         return ResponseEntity.ok(order)
+    }
+    
+    @PutMapping("/{orderId}")
+    fun updateOrder(
+        @PathVariable orderId: UUID,
+        @RequestBody updateOrderRequest: UpdateOrderRequest
+    ): ResponseEntity<Order> {
+        return try {
+            val updatedOrder = orderService.updateOrder(orderId, updateOrderRequest)
+            if (updatedOrder != null) {
+                ResponseEntity.ok(updatedOrder)
+            } else {
+                ResponseEntity.notFound().build()
+            }
+        } catch (e: IllegalStateException) {
+            ResponseEntity.badRequest().build()
+        }
     }
 }

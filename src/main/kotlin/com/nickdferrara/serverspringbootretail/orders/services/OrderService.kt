@@ -1,5 +1,7 @@
 package com.nickdferrara.serverspringbootretail.orders.services
 
+import com.nickdferrara.serverspringbootretail.fulfillment.FulfillmentService
+import com.nickdferrara.serverspringbootretail.orders.dtos.UpdateOrderRequest
 import com.nickdferrara.serverspringbootretail.orders.entities.Order
 import com.nickdferrara.serverspringbootretail.orders.entities.OrderItem
 import com.nickdferrara.serverspringbootretail.orders.enums.OrderStatus
@@ -9,7 +11,8 @@ import java.util.*
 
 @Service
 class OrderService(
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    private val fulfillmentService: FulfillmentService
 ) {
 
     fun createOrder(customerId: String, items: List<OrderItem>): Order {
@@ -23,5 +26,27 @@ class OrderService(
 
         val savedOrder = orderRepository.save(order)
         return savedOrder
+    }
+
+    fun updateOrder(orderId: UUID, updateRequest: UpdateOrderRequest): Order? {
+        if (!fulfillmentService.canOrderBeUpdated(orderId)) {
+            throw IllegalStateException("Order cannot be updated as fulfillment has already started")
+        }
+
+        val existingOrder = orderRepository.findById(orderId).orElse(null) ?: return null
+        
+        val newItems = updateRequest.items ?: existingOrder.items
+        val newTotalAmount = newItems.sumOf { it.price * it.quantity }
+        
+        val updatedOrder = Order(
+            id = existingOrder.id,
+            customerId = updateRequest.customerId ?: existingOrder.customerId,
+            items = newItems,
+            totalAmount = newTotalAmount,
+            status = existingOrder.status,
+            createdAt = existingOrder.createdAt
+        )
+        
+        return orderRepository.save(updatedOrder)
     }
 }
