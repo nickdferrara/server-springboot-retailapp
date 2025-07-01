@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: server-springboot-retail
+  datasource:
+    url: jdbc:postgresql://localhost:5432/retail_db
+    username: retail_user
+    password: retail_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

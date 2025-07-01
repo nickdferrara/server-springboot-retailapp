@@ -3,7 +3,6 @@ package com.nickdferrara.serverspringbootretail.fulfillment.services
 import com.nickdferrara.serverspringbootretail.fulfillment.entities.Picklist
 import com.nickdferrara.serverspringbootretail.fulfillment.enums.FulfillmentStatus
 import com.nickdferrara.serverspringbootretail.fulfillment.repositories.PicklistRepository
-import com.nickdferrara.serverspringbootretail.fulfillment.services.BaseService
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
